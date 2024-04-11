@@ -74,6 +74,49 @@ workflow DEMULTIPLEX {
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
+        // Sanitize inputs and separate input types
+    // FQTK's input contains an extra column 'per_flowcell_manifest' so it is handled seperately
+    // For reference:
+    //      https://raw.githubusercontent.com/nf-core/test-datasets/demultiplex/samplesheet/1.3.0/fqtk-samplesheet.csv VS
+    //      https://raw.githubusercontent.com/nf-core/test-datasets/demultiplex/samplesheet/1.3.0/sgdemux-samplesheet.csv
+    
+    if (demultiplexer == 'fqtk'){
+        ch_inputs = extract_csv_fqtk(ch_input)
+
+        ch_inputs.dump(tag: 'DEMULTIPLEX::inputs',{FormattingService.prettyFormat(it)})
+
+        // Split flowcells into separate channels containg run as tar and run as path
+        // https://nextflow.slack.com/archives/C02T98A23U7/p1650963988498929
+        ch_flowcells = ch_inputs
+            .branch { meta, samplesheet, run, manifest ->
+                tar: run.toString().endsWith('.tar.gz')
+                dir: true
+            }
+
+        ch_flowcells_tar = ch_flowcells.tar
+            .multiMap { meta, samplesheet, run, manifest ->
+                samplesheets: [ meta, samplesheet, manifest ]
+                run_dirs: [ meta, run ]
+            }
+    } else {
+        ch_inputs = extract_csv(ch_input)
+        ch_inputs.dump(tag: 'DEMULTIPLEX::inputs',{FormattingService.prettyFormat(it)})
+
+        // Split flowcells into separate channels containg run as tar and run as path
+        // https://nextflow.slack.com/archives/C02T98A23U7/p1650963988498929
+        ch_flowcells = ch_inputs
+            .branch { meta, samplesheet, run ->
+                tar: run.toString().endsWith('.tar.gz')
+                dir: true
+            }
+
+        ch_flowcells_tar = ch_flowcells.tar
+            .multiMap { meta, samplesheet, run ->
+                samplesheets: [ meta, samplesheet ]
+                run_dirs: [ meta, run ]
+            }
+    }
+
 
     // MODULE: untar
     // Runs when run_dir is a tar archive
