@@ -14,11 +14,13 @@
                 "trim_fastq": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Whether or not to skip trimming"
+                    "description": "Whether or not to skip trimming",
+                    "hidden": true
                 },
                 "skip_tools": {
                     "type": "string",
                     "default": null,
+                    "hidden": true,
                     "description": "Comma-separated list of tools to skip (falco,multiqc)"
                 }
             }
