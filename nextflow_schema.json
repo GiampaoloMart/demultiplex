@@ -19,7 +19,7 @@
                 "skip_tools": {
                     "type": "string",
                     "default": null,
-                    "description": "Comma-separated list of tools to skip (fastp,falco,multiqc)"
+                    "description": "Comma-separated list of tools to skip (falco,multiqc)"
                 }
             }
         },
@@ -70,9 +70,10 @@
             "properties": {
                 "demultiplexer": {
                     "type": "string",
-                    "enum": ["bases2fastq", "bcl2fastq", "bclconvert", "fqtk", "sgdemux"],
+                    "enum": ["bclconvert"],
                     "description": "Demultiplexer to use.",
-                    "fa_icon": "fas fa-microscope"
+                    "fa_icon": "fas fa-microscope",
+                    "default":"bclconvert"
                 }
             }
         },
