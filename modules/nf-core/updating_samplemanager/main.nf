@@ -5,10 +5,7 @@ process UPDATING_SAMPLEMANAGER {
     errorStrategy { task.exitStatus == 143 ? 'retry' : 'ignore' }
 
     input:
-    path "*multiqc_report.html"
-    path "*_data"              
-    path "*_plots"             
-    path "versions.yml"        
+    path "*multiqc_report.html"       
     
     
     output:

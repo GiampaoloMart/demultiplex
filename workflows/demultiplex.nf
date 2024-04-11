@@ -79,7 +79,7 @@ workflow DEMULTIPLEX {
     // For reference:
     //      https://raw.githubusercontent.com/nf-core/test-datasets/demultiplex/samplesheet/1.3.0/fqtk-samplesheet.csv VS
     //      https://raw.githubusercontent.com/nf-core/test-datasets/demultiplex/samplesheet/1.3.0/sgdemux-samplesheet.csv
-    
+
     if (demultiplexer == 'fqtk'){
         ch_inputs = extract_csv_fqtk(ch_input)
 
@@ -194,7 +194,7 @@ workflow DEMULTIPLEX {
     }
 
     // MODULE : UPDATING_SAMPLEMANAGER 
-    UPDATING_SAMPLEMANAGER(MULTIQC.out.collect())
+    UPDATING_SAMPLEMANAGER(MULTIQC.out.report)
     
 }
 
