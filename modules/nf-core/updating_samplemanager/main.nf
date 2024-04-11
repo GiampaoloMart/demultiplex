@@ -16,8 +16,6 @@ process UPDATING_SAMPLEMANAGER {
 
     script:
     """
-    # curl  -s -H "Authorization: Bearer $SMTOKEN"  -X PUT  "$SMURL/public/batch/1542/Status/waiting%20for%20run%20validation/"   |jq
-
     touch workflow_complete.txt
     echo "workflow complete" >> workflow_complete.txt
     """
